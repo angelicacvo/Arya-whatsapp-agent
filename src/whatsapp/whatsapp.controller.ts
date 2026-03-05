@@ -45,11 +45,11 @@ export class WhatsappController {
     );
 
     if (isValid) {
-      this.logger.log('✅ Webhook verification successful');
+      this.logger.log('Webhook verified successfully');
       return challenge?.toString() || '';
     }
 
-    this.logger.error('❌ Webhook verification failed: Invalid token');
+    this.logger.error('Webhook verification failed: invalid token');
     return 'Verification failed';
   }
 
@@ -61,7 +61,7 @@ export class WhatsappController {
   @Post('webhook')
   @HttpCode(200)
   async receiveMessage(@Body() body: any): Promise<string> {
-    this.logger.log('===== WEBHOOK RECEIVED =====');
+    this.logger.log('Webhook received');
 
     try {
       // Extract messages from webhook payload / Extraer mensajes del payload
@@ -96,12 +96,11 @@ export class WhatsappController {
 
         this.logger.log(`Received text: "${textBody}"`);
         
-        // Send response with context (reply to original message)
-        // Enviar respuesta con contexto (responder al mensaje original)
+        // Send normal message (without reply context for fluid conversation)
+        // Enviar mensaje normal (sin contexto de respuesta para conversación fluida)
         await this.whatsappService.sendTextMessage(
           messageSender,
-          `Recibí tu mensaje: ${textBody}`,
-          messageId,
+          `Recibí tu mensaje`,
         );
       } else {
         this.logger.warn(`Unsupported message type: ${messageType}`);

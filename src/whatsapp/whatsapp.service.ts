@@ -59,22 +59,15 @@ export class WhatsappService {
    * Verifica el token del webhook enviado por Meta
    */
   verifyWebhook(mode: string, token: string): boolean {
-    this.logger.log(
-      `Webhook verification - Mode: ${mode}, Token: ${token ? 'present' : 'missing'}`,
-    );
-
     if (mode === 'subscribe' && token === this.verifyToken?.trim()) {
-      this.logger.log('Webhook verification successful');
       return true;
     }
-
-    this.logger.error('Webhook verification failed');
     return false;
   }
 
   /**
-   * Mark message as read with typing indicator
-   * Marca el mensaje como leído y muestra indicador de escritura
+   * Mark message as read
+   * Marca el mensaje como leído
    */
   async markMessageAsRead(messageId: string): Promise<void> {
     const payload = {
@@ -94,13 +87,10 @@ export class WhatsappService {
         }),
       );
 
-      const result = await lastValueFrom(response$);
-      this.logger.log(`✅ Message marked as read: ${messageId}`);
-      return result;
+      await lastValueFrom(response$);
+      this.logger.log(`Message marked as read: ${messageId}`);
     } catch (error) {
-      this.logger.error(`❌ Failed to mark message as read: ${error.message}`);
-      // Don't throw, just log - marking as read is not critical
-      // No lanzar error, solo registrar - marcar como leído no es crítico
+      this.logger.warn(`Failed to mark message as read: ${error.message}`);
     }
   }
 
@@ -140,10 +130,7 @@ export class WhatsappService {
 
     const data = JSON.stringify(payload);
 
-    this.logger.log(`Sending message to ${to}...`);
-    if (replyToMessageId) {
-      this.logger.log(`Reply context: ${replyToMessageId}`);
-    }
+    this.logger.log(`Sending message to ${to}`);
 
     try {
       const response$ = this.httpService.post(this.apiUrl, data, this.config).pipe(
@@ -160,19 +147,12 @@ export class WhatsappService {
       );
 
       const result = await lastValueFrom(response$);
-      this.logger.log(`✅ Message sent successfully to ${to}`);
-      this.logger.log(`Response: ${JSON.stringify(result, null, 2)}`);
+      this.logger.log(`Message sent successfully to ${to}`);
       return result;
     } catch (error) {
-      this.logger.error(`❌ Failed to send message to ${to}`);
-      
-      if (error.response) {
-        this.logger.error(`Status: ${error.response.status}`);
-        this.logger.error(
-          `Response: ${JSON.stringify(error.response.data, null, 2)}`,
-        );
-      }
-
+      this.logger.error(
+        `Failed to send message to ${to}: ${error.message}`,
+      );
       throw error;
     }
   }
@@ -188,7 +168,7 @@ export class WhatsappService {
       to,
       type: 'text',
       text: {
-        body: '⏳', // This will show typing indicator
+        body: 'Processing your data...', // This will show typing indicator
       },
     };
 
