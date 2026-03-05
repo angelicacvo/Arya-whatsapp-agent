@@ -4,7 +4,6 @@ import { HttpService } from '@nestjs/axios';
 import { map, catchError, lastValueFrom } from 'rxjs';
 import { OpenaiService } from '../openai/openai.service';
 import { DatabaseService } from '../database/database.service';
-import { detectMaliciousInput } from '../common/utils/security.utils';
 
 @Injectable()
 export class WhatsappService {
@@ -50,7 +49,7 @@ export class WhatsappService {
         }),
       );
       await lastValueFrom(response$);
-      this.logger.log(`✓ Read: ${messageId}`);
+      this.logger.log(`Message marked as read: ${messageId}`);
     } catch (error) {
       this.logger.warn(`Read mark failed: ${error.message}`);
     }
@@ -77,7 +76,7 @@ export class WhatsappService {
       );
 
       const result = await lastValueFrom(response$);
-      this.logger.log(`✓ Sent to ${to}`);
+      this.logger.log(`Message sent to ${to}`);
       return result;
     } catch (error) {
       this.logger.error(`Send failed: ${error.message}`);
@@ -87,27 +86,22 @@ export class WhatsappService {
 
   async generateWhatsAppResponse(userMessage: string, userPhone?: string): Promise<string> {
     if (!userMessage || userMessage.trim().length === 0) {
-      this.logger.warn('⚠️ Empty message');
+      this.logger.warn('Empty message received');
       return this.invalidMsg();
     }
 
-    this.logger.log(`📩 "${userMessage.substring(0, 50)}"`);
-
-    if (detectMaliciousInput(userMessage)) {
-      this.logger.warn(`🚨 Malicious: "${userMessage.substring(0, 50)}"`);
-      return this.securityMsg();
-    }
+    this.logger.log(`Processing message: "${userMessage.substring(0, 50)}"`);
 
     const intent = await this.openaiService.analyzeUserIntent(userMessage);
-    this.logger.log(`📊 ${intent.intent}, ${intent.product || 'none'}`);
+    this.logger.log(`Intent: ${intent.intent}, Product: ${intent.product || 'none'}`);
 
     let response: string;
 
     if (intent.intent === 'purchase_advice' && intent.product) {
-      this.logger.log(`🛍️ Advice: ${intent.product}`);
+      this.logger.log(`Generating purchase advice for: ${intent.product}`);
       response = await this.openaiService.generatePurchaseAdvice(intent.product);
     } else {
-      this.logger.log('ℹ️ Out-of-scope');
+      this.logger.log('Out-of-scope message');
       response = this.outOfScopeMsg();
     }
 
@@ -125,7 +119,7 @@ export class WhatsappService {
   }
 
   private outOfScopeMsg(): string {
-    return `¡Hola! Soy Arya 👋, tu asistente para comparar precios en Colombia.
+    return `¡Hola! Soy Arya, tu asistente para comparar precios en Colombia.
 
 Ejemplos:
 • "¿Cuánto cuesta un iPhone 13?"
@@ -137,9 +131,5 @@ Ejemplos:
 
   private invalidMsg(): string {
     return 'Por favor envía un mensaje válido con el producto que quieres consultar.';
-  }
-
-  private securityMsg(): string {
-    return 'Lo siento, tu mensaje no pudo ser procesado. Consulta sobre productos específicos.';
   }
 }

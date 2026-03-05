@@ -23,7 +23,7 @@ export class OpenaiService {
 
   async analyzeUserIntent(userMessage: string): Promise<IUserIntent> {
     if (detectMaliciousInput(userMessage)) {
-      this.logger.warn(`🚨 Malicious: "${userMessage.substring(0, 50)}"`);
+      this.logger.warn(`Malicious input detected: "${userMessage.substring(0, 50)}"`);
       return { intent: 'other', product: null };
     }
 
@@ -51,7 +51,7 @@ export class OpenaiService {
         return { intent: 'other', product: null };
       }
 
-      this.logger.log(`📊 ${validated.intent}, ${validated.product || 'none'}`);
+      this.logger.log(`Intent: ${validated.intent}, Product: ${validated.product || 'none'}`);
       return validated;
     } catch (error) {
       this.logger.error(`Intent error: ${error}`);
@@ -68,7 +68,7 @@ Examples: "¿iPhone?" → {"intent":"purchase_advice","product":"iphone"}`;
 
   async generatePurchaseAdvice(product: string): Promise<string> {
     const validated = sanitizeInput(product, 100);
-    this.logger.log(`🛍️ Advice for: ${validated}`);
+    this.logger.log(`Generating advice for: ${validated}`);
 
     try {
       const messages: any[] = [
