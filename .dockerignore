@@ -1,0 +1,56 @@
+# ====================================
+# .dockerignore
+# Archivos que NO se copian al contenedor Docker
+# ====================================
+
+# Dependencias (se instalan con npm ci en el Dockerfile)
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Build output (se genera en el Dockerfile)
+dist/
+build/
+
+# Tests (no necesarios en producción)
+test/
+coverage/
+*.spec.ts
+*.test.ts
+
+# Git
+.git/
+.gitignore
+.github/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Environment variables (Railway las inyecta automáticamente)
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentación
+README.md
+CHECKLIST-WHATSAPP.md
+docs/
+
+# Config files (algunos)
+.prettierrc
+.eslintrc.js
+eslint.config.mjs
+tsconfig.json
+tsconfig.build.json
+nest-cli.json

@@ -3,7 +3,7 @@
  * Basado en la documentación oficial: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/messages
  */
 
-export interface WhatsAppSendMessageResponse {
+export interface IWhatsAppSendMessageResponse {
   messaging_product: string;
   contacts: {
     input: string;
@@ -14,7 +14,7 @@ export interface WhatsAppSendMessageResponse {
   }[];
 }
 
-export interface WhatsAppErrorResponse {
+export interface IWhatsAppErrorResponse {
   error: {
     message: string;
     type: string;
@@ -27,7 +27,7 @@ export interface WhatsAppErrorResponse {
   };
 }
 
-export interface WhatsAppAPIRequestPayload {
+export interface IWhatsAppAPIRequestPayload {
   messaging_product: 'whatsapp';
   recipient_type: 'individual';
   to: string;

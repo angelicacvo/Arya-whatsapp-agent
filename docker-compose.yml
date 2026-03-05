@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  whatsapp-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: whatsapp-agent
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SERPAPI_KEY=${SERPAPI_KEY}
+      - WHATSAPP_CLOUD_API_VERSION=${WHATSAPP_CLOUD_API_VERSION}
+      - WHATSAPP_CLOUD_API_PHONE_NUMBER_ID=${WHATSAPP_CLOUD_API_PHONE_NUMBER_ID}
+      - WHATSAPP_CLOUD_API_ACCESS_TOKEN=${WHATSAPP_CLOUD_API_ACCESS_TOKEN}
+      - WHATSAPP_CLOUD_API_WEBHOOK_VERIFICATION=${WHATSAPP_CLOUD_API_WEBHOOK_VERIFICATION}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 3s
+      start_period: 10s
+      retries: 3
+    networks:
+      - whatsapp-network
+
+networks:
+  whatsapp-network:
+    driver: bridge
