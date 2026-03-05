@@ -11,6 +11,7 @@ export const StorePriceSchema = z
   .object({
     store: z.string().min(1).max(50),
     price: z.number().positive().int(),
+    rating: z.number().min(0).max(5).optional(),
   })
   .strict();
 
