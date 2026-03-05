@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const UserIntentSchema = z
   .object({
-    intent: z.enum(['purchase_advice', 'other']),
+    intent: z.enum(['purchase_advice', 'farewell', 'other']),
     product: z.string().max(100).nullable(),
   })
   .strict();

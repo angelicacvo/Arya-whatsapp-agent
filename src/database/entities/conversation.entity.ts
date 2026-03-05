@@ -12,7 +12,7 @@ export class Conversation {
   message: string;
 
   @Column({ type: 'varchar', length: 20, nullable: false, default: 'other' })
-  intent: 'purchase_advice' | 'other';
+  intent: 'purchase_advice' | 'farewell' | 'other';
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   product?: string;

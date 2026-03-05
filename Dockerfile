@@ -1,5 +1,5 @@
 # ====================================
-# 🐳 Dockerfile para WhatsApp Agent
+# Dockerfile para WhatsApp Agent
 # Compatible con Railway y Docker Desktop
 # ====================================
 

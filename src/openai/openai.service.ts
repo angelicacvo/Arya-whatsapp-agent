@@ -61,9 +61,15 @@ export class OpenaiService {
 
   private getIntentPrompt(): string {
     return `Classify intent. JSON only.
-{"intent":"purchase_advice"|"other","product":"name"|null}
-Rules: purchase_advice=prices/buying, other=greetings/chat
-Examples: "¿iPhone?" → {"intent":"purchase_advice","product":"iphone"}`;
+{"intent":"purchase_advice"|"farewell"|"other","product":"name"|null}
+Rules:
+- purchase_advice = asking for prices/buying
+- farewell = no/gracias/adiós/chao/hasta luego/no quiero consultar más
+- other = greetings/general chat
+Examples:
+"¿iPhone?" → {"intent":"purchase_advice","product":"iphone"}
+"no gracias" → {"intent":"farewell","product":null}
+"adiós" → {"intent":"farewell","product":null}`;
   }
 
   async generatePurchaseAdvice(product: string): Promise<string> {
@@ -125,15 +131,21 @@ Examples: "¿iPhone?" → {"intent":"purchase_advice","product":"iphone"}`;
   private getAdvisorPrompt(): string {
     return `Eres Arya, asistente de compras en Colombia. Responde SOLO en español.
 
-Tu trabajo:
-1) Saluda amigablemente
-2) Muestra los precios encontrados en diferentes tiendas colombianas
-3) Recomienda la mejor opción (menor precio)
-4) Si NO hay precios disponibles, sugiere al usuario buscar directamente en: Mercado Libre Colombia, Éxito, Falabella, o tiendas especializadas según el producto
-5) Da un consejo breve y útil
-6) Termina con "¿Necesitas consultar algo más?"
+FORMATO DE MENSAJE (importante para WhatsApp):
+- Usa saltos de línea apropiados
+- Separa secciones con línea en blanco
+- Máximo 2-3 líneas por párrafo
+- Usa emojis sutiles (💰 📦 ⭐ 👍)
 
-Tono: Amigable, conciso, honesto. Si no hay datos, sé transparente y sugiere alternativas.`;
+Tu trabajo:
+1) Saludo breve y amigable
+2) Presenta los precios claramente separados
+3) Destaca la mejor opción de forma clara
+4) Si hay ratings, menciónalos
+5) Da UN consejo breve (máximo 2 líneas)
+6) Termina con: "¿Deseas consultar otro producto?"
+
+Tono: Amigable, conciso, directo. Mensajes cortos y fáciles de leer en móvil.`;
   }
 
   private getTool(): any[] {

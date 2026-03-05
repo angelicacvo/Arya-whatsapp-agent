@@ -100,6 +100,9 @@ export class WhatsappService {
     if (intent.intent === 'purchase_advice' && intent.product) {
       this.logger.log(`Generating purchase advice for: ${intent.product}`);
       response = await this.openaiService.generatePurchaseAdvice(intent.product);
+    } else if (intent.intent === 'farewell') {
+      this.logger.log('User farewell');
+      response = this.farewellMsg();
     } else {
       this.logger.log('Out-of-scope message');
       response = this.outOfScopeMsg();
@@ -119,17 +122,25 @@ export class WhatsappService {
   }
 
   private outOfScopeMsg(): string {
-    return `¡Hola! Soy Arya, tu asistente para comparar precios en Colombia.
+    return `¡Hola! 👋 Soy *Arya*, tu asistente para comparar precios en Colombia.
 
-Ejemplos:
+*Ejemplos de consulta:*
 • "¿Cuánto cuesta un iPhone 13?"
 • "Precio de PlayStation 5"
 • "Pollo de Frisby"
 
-¿Qué producto deseas consultar?`;
+¿Qué producto deseas consultar? 🔍`;
+  }
+
+  private farewellMsg(): string {
+    return `¡Gracias por usar *Arya*! 😊
+
+Espero haberte ayudado a encontrar los mejores precios.
+
+¡Vuelve cuando necesites consultar otro producto! 👋`;
   }
 
   private invalidMsg(): string {
-    return 'Por favor envía un mensaje válido con el producto que quieres consultar.';
+    return 'Por favor envía un mensaje válido con el producto que quieres consultar. 📝';
   }
 }

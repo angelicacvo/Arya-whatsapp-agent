@@ -12,7 +12,7 @@ export class DatabaseService {
   async saveConversation(data: {
     user_phone: string;
     message: string;
-    intent: 'purchase_advice' | 'other';
+    intent: 'purchase_advice' | 'farewell' | 'other';
     product?: string;
     bot_response: string;
   }): Promise<string | null> {

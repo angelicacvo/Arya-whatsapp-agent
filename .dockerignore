@@ -1,5 +1,5 @@
 # ====================================
-# 🚫 .dockerignore
+# .dockerignore
 # Archivos que NO se copian al contenedor Docker
 # ====================================
 

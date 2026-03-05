@@ -1,4 +1,4 @@
 export interface IUserIntent {
-  intent: 'purchase_advice' | 'other';
+  intent: 'purchase_advice' | 'farewell' | 'other';
   product: string | null;
 }
