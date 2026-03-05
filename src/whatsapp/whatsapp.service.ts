@@ -122,14 +122,14 @@ export class WhatsappService {
   }
 
   private outOfScopeMsg(): string {
-    return `¡Hola! 👋 Soy *Arya*, tu asistente para comparar precios en Colombia.
+    return `¡Hola! 👋 Soy *Arya*, tu asistente de compras en Colombia.
 
-*Ejemplos de consulta:*
-• "¿Cuánto cuesta un iPhone 13?"
-• "Precio de PlayStation 5"
-• "Pollo de Frisby"
+Puedo ayudarte a comparar precios de productos. Algunos ejemplos:
+- "¿Cuánto cuesta un iPhone 13?"
+- "Precio de PlayStation 5"
+- "Comida para gatos"
 
-¿Qué producto deseas consultar? 🔍`;
+¿Qué producto deseas consultar?`;
   }
 
   private farewellMsg(): string {
@@ -137,10 +137,12 @@ export class WhatsappService {
 
 Espero haberte ayudado a encontrar los mejores precios.
 
-¡Vuelve cuando necesites consultar otro producto! 👋`;
+¡Vuelve cuando necesites! 👋`;
   }
 
   private invalidMsg(): string {
-    return 'Por favor envía un mensaje válido con el producto que quieres consultar. 📝';
+    return `No entendí tu mensaje. 🤔
+
+Por favor dime qué producto deseas consultar.`;
   }
 }

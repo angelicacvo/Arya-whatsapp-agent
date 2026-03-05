@@ -154,25 +154,23 @@ RESPUESTA EN JSON:
 
   formatPriceComparisonForPrompt(data: IPriceComparison): string {
     if (data.prices.length === 0) {
-      return `*Producto:* ${data.product}
+      return `No encontré precios disponibles en línea para *${data.product}*. 😕
 
-No encontré precios disponibles en línea para este producto específico. 😕
-
-*Te sugiero buscar en:*
-• Mercado Libre Colombia
-• Éxito, Falabella, Alkosto
-• Tiendas especializadas según el producto
-• Sitios web oficiales de la marca`;
+Te sugiero buscar en:
+- Mercado Libre Colombia
+- Éxito, Falabella, Alkosto
+- Tiendas especializadas
+- Sitios oficiales de la marca`;
     }
 
     // Lista de precios ordenados
-    const priceList = data.prices
-      .sort((a, b) => a.price - b.price)
+    const sortedPrices = data.prices.sort((a, b) => a.price - b.price);
+    const priceList = sortedPrices
       .map((p, i) => {
         const price = `$${p.price.toLocaleString('es-CO')}`;
-        const rating = p.rating ? ` ⭐ ${p.rating.toFixed(1)}` : '';
-        const badge = i === 0 ? ' 💰' : '';
-        return `• *${p.store}*: ${price}${rating}${badge}`;
+        const rating = p.rating ? ` ⭐${p.rating.toFixed(1)}` : '';
+        const badge = i === 0 ? ' (Mejor precio)' : '';
+        return `- *${p.store}*: ${price}${rating}${badge}`;
       })
       .join('\n');
 
@@ -180,18 +178,17 @@ No encontré precios disponibles en línea para este producto específico. 😕
     const savings = data.average_price - data.best_price;
     const savingsPercent = this.savingsPercent(savings, data.average_price);
     
-    let result = `*📦 Producto:* ${data.product}\n\n`;
-    result += `*Precios encontrados en Colombia:*\n${priceList}\n\n`;
-    result += `📊 *Precio promedio:* $${data.average_price.toLocaleString('es-CO')}\n`;
-    result += `💰 *Ahorro vs promedio:* $${savings.toLocaleString('es-CO')} (${savingsPercent}%)\n\n`;
-    result += `👉 *Mejor PRECIO:* ${data.best_store} con $${data.best_price.toLocaleString('es-CO')}`;
-
-    if (data.best_rated_store && data.best_rating) {
-      result += `\n\n⭐ *Mejor CALIFICACIÓN:* ${data.best_rated_store} (${data.best_rating.toFixed(1)}/5)`;
+    let result = `Encontré varias opciones de *${data.product}* en Colombia:\n\n`;
+    result += `${priceList}\n\n`;
+    result += `La mejor opción es *${data.best_store}* con un precio de *$${data.best_price.toLocaleString('es-CO')}*`;
+    
+    if (savings > 0 && savingsPercent !== '0.0') {
+      result += `, lo que te ahorra un ${savingsPercent}% en comparación con el precio promedio`;
     }
+    result += `.`;
 
-    if (data.best_value_store && data.best_value_store !== data.best_store && data.best_value_store !== data.best_rated_store) {
-      result += `\n\n🎯 *Mejor RELACIÓN calidad-precio:* ${data.best_value_store}`;
+    if (data.best_rated_store && data.best_rating && data.best_rated_store !== data.best_store) {
+      result += `\n\n⭐ La tienda con mejor calificación es *${data.best_rated_store}* (${data.best_rating.toFixed(1)}/5).`;
     }
 
     return result;
