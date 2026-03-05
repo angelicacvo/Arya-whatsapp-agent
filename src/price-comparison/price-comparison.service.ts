@@ -70,7 +70,7 @@ export class PriceComparisonService {
     }
 
     try {
-      const query = `${product} precio Colombia comprar`;
+      const query = `${product} precio Colombia`;
       const url = 'https://serpapi.com/search';
       
       const response = await firstValueFrom(
@@ -83,6 +83,7 @@ export class PriceComparisonService {
             num: 10,
             api_key: this.serpApiKey,
           },
+          timeout: 10000,
         })
       );
 

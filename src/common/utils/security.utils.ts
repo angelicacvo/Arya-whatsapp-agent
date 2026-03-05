@@ -35,8 +35,10 @@ export function sanitizeInput(input: string, maxLength: number = 200): string {
 
 export function isValidProductName(product: string): boolean {
   if (!product || typeof product !== 'string') return false;
-  const pattern = /^[a-zA-Z0-9\s\-_áéíóúñÁÉÍÓÚÑ]+$/;
-  return pattern.test(product) && product.length >= 2 && product.length <= 100;
+  const trimmed = product.trim();
+  // Allow letters, numbers, spaces, hyphens, underscores, Spanish chars, and common symbols
+  const pattern = /^[a-zA-Z0-9\s\-_áéíóúñÁÉÍÓÚÑüÜ.,()]+$/;
+  return pattern.test(trimmed) && trimmed.length >= 2 && trimmed.length <= 100;
 }
 
 export function hashIdentifier(identifier: string): string {

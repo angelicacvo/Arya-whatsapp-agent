@@ -66,10 +66,12 @@ Rules:
 - purchase_advice = asking for prices/buying
 - farewell = no/gracias/adiós/chao/hasta luego/no quiero consultar más
 - other = greetings/general chat
+- Extract ONLY the product name, remove quantities/units (kilo, libra, gramo, unidad, etc)
 Examples:
 "¿iPhone?" → {"intent":"purchase_advice","product":"iphone"}
-"no gracias" → {"intent":"farewell","product":null}
-"adiós" → {"intent":"farewell","product":null}`;
+"Cuánto vale un kilo de avena" → {"intent":"purchase_advice","product":"avena"}
+"Precio de 2 libras de café" → {"intent":"purchase_advice","product":"café"}
+"no gracias" → {"intent":"farewell","product":null}`;
   }
 
   async generatePurchaseAdvice(product: string): Promise<string> {

@@ -158,6 +158,39 @@ Once webhook is configured:
 - Send a message from your phone to the WhatsApp Business number
 - The bot should respond automatically
 
+## Postman Collection
+
+A complete Postman collection is available for testing the API endpoints:
+
+**Collection ID:** `0b280cc9-4baa-4071-8962-a1cadcbc5522`
+
+**Available Endpoints:**
+
+1. **GET /whatsapp/webhook** - Webhook Verification
+   - Query Parameters:
+     - `hub.mode`: "subscribe"
+     - `hub.verify_token`: Your verification token
+     - `hub.challenge`: Test challenge value
+   - Response: Returns the challenge value if verification is successful
+
+2. **POST /whatsapp/webhook** - Receive WhatsApp Message
+   - Headers: `Content-Type: application/json`
+   - Body: WhatsApp Cloud API webhook format (see collection for example)
+   - Response: "Message processed" (200 OK)
+
+**Collection Variables:**
+- `base_url`: Railway deployment URL (https://bountiful-reprieve-production.up.railway.app)
+- `verify_token`: Webhook verification token
+
+**How to Use:**
+1. Go to your Postman workspace
+2. Find "WhatsApp Agent API" collection
+3. Update variables with your own values if testing locally
+4. Run the requests to test the endpoints
+
+**For Local Testing:**
+Change the `base_url` variable to `http://localhost:3003` (or your local port).
+
 ## Project Structure Explained
 
 The project is organized in modules. Each module handles a specific responsibility:
