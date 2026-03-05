@@ -3,10 +3,9 @@
 # Archivos que NO se copian al contenedor Docker
 # ====================================
 
-# Dependencias (se instalan con npm ci en el Dockerfile)
+# Dependencias (se instalan con npm install en el Dockerfile)
 node_modules/
 npm-debug.log
-package-lock.json
 
 # Build output (se genera en el Dockerfile)
 dist/
@@ -47,10 +46,7 @@ README.md
 CHECKLIST-WHATSAPP.md
 docs/
 
-# Config files (algunos)
+# Config files opcionales
 .prettierrc
 .eslintrc.js
 eslint.config.mjs
-tsconfig.json
-tsconfig.build.json
-nest-cli.json

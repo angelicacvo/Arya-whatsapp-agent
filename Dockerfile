@@ -13,7 +13,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instalar TODAS las dependencias (dev + prod) para poder compilar TypeScript
-RUN npm ci
+RUN npm install
 
 # --- Stage 2: Build ---
 # Compilar el código TypeScript a JavaScript
